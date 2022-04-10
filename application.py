@@ -3,10 +3,10 @@ from typing import Callable
 
 def application(request_data: dict, make_response: Callable):
 
-    response_body = b"Hello World!"
+    response_body = b"<h1>Hello World!</h1>"
     make_response(
         "200 OK",
-        [("Content-Type", "text/plain"), ("Content-Length", str(len(response_body)))],
+        [("Content-Type", "text/html"), ("Content-Length", str(len(response_body)))],
     )
 
     return [

@@ -27,40 +27,45 @@ tasks = [
 def application(request_data: dict, make_response: Callable):
 
     path = request_data["PATH_INFO"]
-    status_code = "200 OK"
-    headers = []
 
     if path in ["/tasks", "/tasks/"]:
-        headers.append(("Content-Type", "application/json"))
-        response_body = bytes(
+        return response(
+            200,
+            "application/json",
             json.dumps({"tasks": [dataclasses.asdict(t) for t in tasks]}, default=str),
-            "utf8",
+            make_response,
         )
     elif "/tasks/" in path:
-        headers.append(("Content-Type", "application/json"))
         task_id = int(path.split("/")[-1])
         try:
             task = next(filter(lambda t: t.id == task_id, tasks))
-            response_body = bytes(
+            return response(
+                200,
+                "application/json",
                 json.dumps(dataclasses.asdict(task), default=str),
-                "utf8",
+                make_response,
             )
         except StopIteration as e:
-            status_code = "404 Not found"
-            response_body = bytes(
-                json.dumps({"error": f"Task with id {task_id} not found"}), "utf8"
+            return response(
+                404,
+                "application/json",
+                json.dumps({"error": f"Task with id {task_id} not found"}),
+                make_response,
             )
     elif path == "/":
-        headers.append(("Content-Type", "text/plain"))
-        response_body = b"Hello World!"
+        return response(200, "text/plain", "Hello, world!", make_response)
     else:
-        status_code = "404 Not found"
-        headers.append(("Content-Type", "text/plain"))
-        response_body = b"Not found"
+        return response(404, "text/plain", "Not found", make_response)
 
-    headers.append(("Content-Length", str(len(response_body))))
-    make_response(status_code, headers)
 
-    return [
-        response_body,
-    ]
+def response(
+    status_code: int, content_type: str, response: str, make_response: Callable
+):
+    STATUS = {
+        200: "200 OK",
+        404: "404 Not found",
+    }
+    resp = bytes(response, "utf8")
+    headers = [("Content-Type", content_type), ("Content-Length", str(len(resp)))]
+    make_response(STATUS[status_code], headers)
+    return [resp]

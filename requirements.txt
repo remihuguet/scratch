@@ -2,3 +2,5 @@ gunicorn
 black
 flake8
 pep8-naming
+pytest
+requests

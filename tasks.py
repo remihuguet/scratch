@@ -4,6 +4,7 @@ from datetime import datetime
 
 @dataclasses.dataclass
 class Task:
+    id: int
     title: str
     rank: int
     created: datetime

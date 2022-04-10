@@ -9,3 +9,15 @@
 5. Mettre à jour pip `pip install -U pip setuptools`
 6.  Installer les dépendances du projet: `pip install -r requirements.txt`
 7.  Pour faire tourner l'application en local: `gunicorn application --reload`
+
+
+## Fonctionnalités de Todo list
+
+- API avec laquelle interagir en envoyant et récupérant de la donnée au format JSON
+- Une tâche: Un titre, Une description, Un rang, Une date de création, Une date de modification, Un état - complétée ou non
+- Lister les tâches
+- Obtenir le détail d’une tâche
+- Créer une tâche
+- Compléter une tâche
+- Supprimer une tâche
+- Modifier une tâche
